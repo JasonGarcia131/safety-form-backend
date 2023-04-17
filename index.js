@@ -11,8 +11,14 @@ connectDB();
 
 app.use(cors());
 app.use(express.json());
-app.use(bodyParser);
 
+
+// app.use("/", (req,res)=>{
+//     res.send("Home page")
+// });
+
+const inspectionController = require("./controllers/inspectionController");
+app.use("/inspection", inspectionController);
 
 mongoose.connection.once('open', () => {
     console.log('Connected to MongoDB');
