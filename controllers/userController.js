@@ -1,17 +1,14 @@
 const express = require("express");
-const router = express.Router();
-const User = require("../models/User");
+const User = require("../model/User");
 
-
-router.get("/all", async (req, res) => {
-    try{
+const getAllUsers = async (req, res) => {
         const users = await User.find().select("-password");
         if (!users) return res.status(204).json({ 'message': 'No users found' });
         res.json(users);
-    }catch(e)
-});
+}
 
-router.get("/:id", async (req, res)=> {
+const getUser = async (req, res)=> {
+    console.log("req", req.body)
     try{
         const id = objectId(req.params.id);
         if (!req?.params?.id) return res.status(400).json({ "message": 'User ID required' });
@@ -23,4 +20,9 @@ router.get("/:id", async (req, res)=> {
     }catch(e){
         console.log(e)
     }
-})
+}
+
+module.exports = {
+    getAllUsers,
+    getUser    
+}

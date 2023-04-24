@@ -1,8 +1,8 @@
 const express = require("express");
 const router = express.Router();
-const Inspection = require("../models/Inspection");
+const Inspection = require("../model/Inspection");
 
-router.get("/all", async (req, res) => {
+const getAllInspections = async (req, res) => {
     try {
         const inspections = await Inspection.find();
         if (!inspections) return res.status(204).json({ 'message': 'No inspections found' });
@@ -10,11 +10,11 @@ router.get("/all", async (req, res) => {
     } catch (e) {
         console.log(e)
     }
-});
+}
 
-router.get("/:submittedBy", async (req, res) => {
+const getInspectionsByUsername = async (req, res) => {
     const {submittedBy} = req.params;
-    console.log("submittedBy", submittedBy)
+    console.log("by username", submittedBy)
     try{
         const inspections = await Inspection.find({
                 submittedBy: submittedBy
@@ -25,12 +25,13 @@ router.get("/:submittedBy", async (req, res) => {
     }catch(e){
         console.log(e)
     }
-});
+}
 
-router.get("/inspectionById/:_id", async (req, res)=> {
+const getInspectionById = async (req, res)=> {
+    console.log("req.params", req.params)
     try{
         const {_id} = req.params
-        console.log("id", _id)
+        console.log("by id", _id)
         if (!_id) return res.status(400).json({ "message": 'User ID required' });
         const inspection = await Inspection.findOne({_id: _id});
         if (!inspection) {
@@ -40,10 +41,9 @@ router.get("/inspectionById/:_id", async (req, res)=> {
     }catch(e){
         console.log(e)
     }
-})
+}
 
-
-router.post("/submit", async (req, res) => {
+const submitInspection = async (req, res) => {
 
     try {
         const response = await Inspection.create({
@@ -57,6 +57,11 @@ router.post("/submit", async (req, res) => {
         console.log(e);
     }
 
-})
+}
 
-module.exports = router;
+module.exports = {
+    getAllInspections,
+    getInspectionById,
+    getInspectionsByUsername,
+    submitInspection
+}
